@@ -1,0 +1,267 @@
+import AutocompleteInput from '@/components/AutocompleteInput';
+import DatePickerInput from '@/components/DatePickerInput';
+import MenuDropdown from '@/components/MenuDropdown';
+import axiosInstance from '@/config/axiosConfig';
+import { useAppContext } from '@/context/AppContextProvider';
+import { useRouter } from 'expo-router';
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, IconButton, TextInput } from "react-native-paper";
+import { convertToQueryParams } from "../utils/helper";
+// import { useAppContext } from "./context/AppContextProvider";
+
+export default function Home() {
+  const {
+    searchParams,
+    setSearchParams,
+    fromLoading,
+    setFromLoading,
+    fromInput,
+    setFromInput,
+    fromSuggestions,
+    setFromSuggestions,
+    toLoading,
+    setToLoading,
+    toInput,
+    setToInput,
+    toSuggestions,
+    setToSuggestions,
+    setFlightOffers,
+    flightClasses
+  } = useAppContext();
+
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [offersLoading, setOffersLoading] = useState(false);
+
+  const router = useRouter();
+
+  const fetchSuggestions = async (type: 'from' | 'to', keyword: string) => {
+    try {
+      if (keyword.length < 3) return;
+      type === "from" ? setFromLoading(true) : setToLoading(true);
+      const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
+
+      const suggestions = response.data.flatMap((entry: any) => {
+        return entry.groupData.length > 0 ? [entry, ...entry.groupData] : [entry];
+      });
+
+      if (type === 'from') setFromSuggestions(suggestions);
+
+      if (type === 'to') setToSuggestions(suggestions);
+    } catch (error) {
+      console.error("Error fetching suggestions: ", error);
+      if (type === 'from') setFromSuggestions([]);
+      if (type === 'to') setToSuggestions([]);
+      return;
+    } finally {
+      type === "from" ? setFromLoading(false) : setToLoading(false);
+    }
+  }
+
+  const handleFromInputChange = (text: string) => {
+    if (text == "" || text == null || text == undefined) {
+      setFromSuggestions([]);
+      setFromInput("");
+      setFromLoading(false);
+      setSearchParams({ ...searchParams, from: "" });
+      return;
+    }
+    setFromInput(text);
+    setFromLoading(true);
+    fetchSuggestions('from', text).then(() => {
+      setFromLoading(false);
+    });
+  }
+
+  const handleToInputChange = (text: string) => {
+    if (text == "" || text == null || text == undefined) {
+      setToSuggestions([]);
+      setToInput("");
+      setToLoading(false);
+      setSearchParams({ ...searchParams, to: "" });
+      return;
+    }
+    setToInput(text);
+    setToLoading(true);
+    fetchSuggestions('to', text).then(() => {
+      setToLoading(false);
+    });
+  }
+
+  const handleChange = (field: keyof typeof searchParams) => (value: string) => {
+    setSearchParams({
+      ...searchParams,
+      [field]: value
+    });
+  }
+
+  const swapLocations = () => {
+    if (!searchParams.from || !searchParams.to) return;
+    const temp = searchParams.from;
+    setFromInput(toInput);
+    setToInput(fromInput);
+    setFromSuggestions([]);
+    setToSuggestions([]);
+    setFromLoading(false);
+    setToLoading(false);
+    setSearchParams((prev: any) => {
+      return {
+        ...prev,
+        from: prev.to,
+        to: temp
+      }
+    });
+  }
+
+  const handleSubmit = async () => {
+    console.log("submit called");
+    setOffersLoading(true);
+    try {
+      if (!searchParams.from || !searchParams.to || !searchParams.departureDate || !searchParams.flightClass || searchParams.adults < 1) {
+        alert("Please fill all required fields");
+        return;
+      }
+      const params = {
+        originLocationCode: searchParams.from,
+        destinationLocationCode: searchParams.to,
+        departureDate: searchParams.departureDate,
+        adults: searchParams.adults,
+        children: searchParams.children,
+        infants: searchParams.infants,
+        travelClass: searchParams.flightClass.toUpperCase(),
+        currencyCode: "USD",
+        max: 20
+      }
+      const queryparams = convertToQueryParams(params);
+      const response = await axiosInstance.get(`/flights/search?${queryparams}`);
+      setFlightOffers(response.data);
+      setTimeout(() => {
+        router.push("/offers");
+      }, 50);
+    } catch (error) {
+      console.error("Error fetching flight offers: ", error);
+      alert("Failed to fetch flight offers. Please try again.");
+      setOffersLoading(false);
+    } finally {
+      setOffersLoading(false);
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      {/* <Button onPress={() => console.log(searchParams)}>searchParams</Button> */}
+      <AutocompleteInput
+        options={fromSuggestions}
+        inputLabel={"From"}
+        inputValue={fromInput}
+        onInputChange={handleFromInputChange}
+        onSelectOption={(option: any) => {
+          console.log("Selected from option: ", option);
+          setSearchParams({ ...searchParams, from: option.iata });
+          setFromInput(option.name);
+        }}
+        loading={fromLoading}
+        icon={"airplane-takeoff"}
+      />
+      <IconButton
+        icon="swap-vertical"
+        size={24}
+        onPress={swapLocations}
+        style={{ marginTop: -20, marginBottom: -6, alignSelf: 'center' }}
+      />
+      <AutocompleteInput
+        options={toSuggestions}
+        inputLabel={"To"}
+        inputValue={toInput}
+        onInputChange={handleToInputChange}
+        onSelectOption={(option: any) => {
+          setSearchParams({ ...searchParams, to: option.iata });
+          setToInput(option.name);
+        }}
+        loading={toLoading}
+        icon={"airplane-landing"}
+      />
+      <TextInput
+        label="Passengers"
+        value={searchParams.adults.toString()}
+        onChangeText={handleChange('adults')}
+        keyboardType="numeric"
+        style={styles.input}
+        left={<TextInput.Icon icon="account" />}
+      // textContentType='numeric'
+      />
+
+      {/* <Menu
+        visible={menuVisible}
+        onDismiss={() => setMenuVisible(false)}
+        style={styles.input}
+        anchor={
+          <Button
+            mode="outlined"
+            style={styles.input}
+            onPress={() => setMenuVisible(true)}
+            icon="seat-passenger"
+          >
+            {searchParams.flightClass || 'Select Flight Class'}
+          </Button>
+        }>
+        {flightClasses.map((fc: string) => (
+          <Menu.Item
+            key={fc}
+            onPress={() => {
+              handleChange('flightClass')(fc);
+              setMenuVisible(false);
+            }}
+            title={fc}
+          />
+        ))}
+      </Menu> */}
+      <View style={styles.input}>
+        <MenuDropdown 
+          items={flightClasses}
+          selectedItem={searchParams.flightClass}
+          label="Select Flight Class"
+          type="flightClass"
+          handleChange={handleChange}
+        />
+      </View>
+
+      <DatePickerInput
+        handleChange={handleChange}
+        placeholderText="Departure Date"
+        dateValue={searchParams.departureDate ? new Date(searchParams.departureDate).toDateString() : ""}
+        dateType='departureDate'
+      />
+
+      <DatePickerInput
+        handleChange={handleChange}
+        placeholderText="Return Date"
+        dateValue={searchParams.returnDate ? new Date(searchParams.returnDate).toDateString() : ""}
+        dateType='returnDate'
+      />
+
+      <Button
+        mode="contained"
+        onPress={handleSubmit}
+        style={styles.button}
+        loading={offersLoading}
+        disabled={offersLoading}
+      >
+        {offersLoading ? "Searching" : "Search Flights"}
+      </Button>
+    </View>
+  );
+};
+
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  button: {
+    marginTop: 16,
+  },
+});

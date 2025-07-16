@@ -1,29 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { AppContextProvider } from "@/context/AppContextProvider";
+import { theme } from "@/themes/theme";
+import { Stack } from "expo-router";
+import { Provider as PaperProvider } from "react-native-paper";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <AppContextProvider>
+        <PaperProvider theme={theme}>
+            <Stack>
+              <Stack.Screen name="index" options={{
+                headerTitle: "Home",
+                headerLeft: () => <></>
+              }}/>
+              
+              <Stack.Screen name="about" options={{
+                headerTitle: "ABout"
+              }}  />
+              
+              <Stack.Screen name="+not-found" options={{
+                headerShown: false
+              }} />
+            </Stack>
+        </PaperProvider>
+      </AppContextProvider>
   );
 }

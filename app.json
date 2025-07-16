@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "jtravel-native-app",
-    "slug": "jtravel-native-app",
+    "slug": "jtravel-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d39231cf-47fb-44e3-a5a2-fc52fb2b8c45"
+      }
+    },
+    "owner": "rituraj49"
   }
 }
