@@ -28,6 +28,8 @@ const [flightOffers, setFlightOffers] = useState([]);
 
 const [selectedFlightOffer, setSelectedFlightOffer] = useState<any>(null);
 
+const [apiUrl, setApiUrl] = useState("");
+
 const [travelers, setTravelers] = useState(
     Array(selectedFlightOffer && selectedFlightOffer.totalTravelers).fill({
         firstName: "",
@@ -81,6 +83,7 @@ const [travelers, setTravelers] = useState(
         }
     }, [selectedFlightOffer]);
 
+
 return (
     <AppContext.Provider value={{
         searchParams, 
@@ -90,7 +93,8 @@ return (
         toLoading, setToLoading, toInput, setToInput, toSuggestions, setToSuggestions, 
         flightOffers, setFlightOffers, 
         selectedFlightOffer, setSelectedFlightOffer,
-        travelers, setTravelers
+        travelers, setTravelers,
+        apiUrl, setApiUrl
     }}>
         {children}
     </AppContext.Provider>

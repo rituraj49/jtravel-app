@@ -1,14 +1,13 @@
 import AutocompleteInput from '@/components/AutocompleteInput';
 import DatePickerInput from '@/components/DatePickerInput';
 import MenuDropdown from '@/components/MenuDropdown';
-import axiosInstance from '@/config/axiosConfig';
 import { useAppContext } from '@/context/AppContextProvider';
+import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, IconButton, TextInput } from "react-native-paper";
 import { convertToQueryParams } from "../utils/helper";
-// import { useAppContext } from "./context/AppContextProvider";
 
 export default function Home() {
   const {
@@ -27,11 +26,12 @@ export default function Home() {
     toSuggestions,
     setToSuggestions,
     setFlightOffers,
-    flightClasses
+    flightClasses,
+    apiUrl, setApiUrl
   } = useAppContext();
 
-  const [menuVisible, setMenuVisible] = useState(false);
   const [offersLoading, setOffersLoading] = useState(false);
+  const [inputUrl, setInputUrl] = useState("");
 
   const router = useRouter();
 
@@ -39,7 +39,8 @@ export default function Home() {
     try {
       if (keyword.length < 3) return;
       type === "from" ? setFromLoading(true) : setToLoading(true);
-      const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
+      // const response = await axiosState.get(`/locations/search?keyword=${keyword}`);
+      const response = await axios.get(`${apiUrl}/locations/search?keyword=${keyword}`);
 
       const suggestions = response.data.flatMap((entry: any) => {
         return entry.groupData.length > 0 ? [entry, ...entry.groupData] : [entry];
@@ -48,8 +49,9 @@ export default function Home() {
       if (type === 'from') setFromSuggestions(suggestions);
 
       if (type === 'to') setToSuggestions(suggestions);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching suggestions: ", error);
+      alert("Failed to fetch suggestions. Please try again.");
       if (type === 'from') setFromSuggestions([]);
       if (type === 'to') setToSuggestions([]);
       return;
@@ -133,7 +135,8 @@ export default function Home() {
         max: 20
       }
       const queryparams = convertToQueryParams(params);
-      const response = await axiosInstance.get(`/flights/search?${queryparams}`);
+      // const response = await axiosState.get(`/flights/search?${queryparams}`);
+      const response = await axios.get(`${apiUrl}/flights/search?${queryparams}`);
       setFlightOffers(response.data);
       setTimeout(() => {
         router.push("/offers");
@@ -149,6 +152,15 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <TextInput 
+        label="set the api url"
+        mode="outlined"
+        style={styles.input}
+        value={inputUrl}
+        onChangeText={setInputUrl}
+      />
+      <Button mode='outlined' onPress={() => setApiUrl("http://"+inputUrl.trim().toLowerCase()+":8080")}>set url</Button>
+
       {/* <Button onPress={() => console.log(searchParams)}>searchParams</Button> */}
       <AutocompleteInput
         options={fromSuggestions}

@@ -1,12 +1,12 @@
 import TravelerForm from "@/components/TravelerForm";
-import axiosInstance from "@/config/axiosConfig";
 import { useAppContext } from "@/context/AppContextProvider";
+import axios from "axios";
 import { useState } from "react";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { Button, List } from "react-native-paper";
 
 export default function Booking() {
-    const {travelers, setTravelers, selectedFlightOffer} = useAppContext();
+    const {travelers, setTravelers, selectedFlightOffer, apiUrl} = useAppContext();
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
     const genderOptions = ["MALE", "FEMALE", "OTHER"];
@@ -71,7 +71,8 @@ export default function Booking() {
                 }))
             }
 
-            const response = await axiosInstance.post("/booking/flight-order", bookingData)
+            // const response = await axiosInstance.post("/booking/flight-order", bookingData)
+            const response = await axios.post(`${apiUrl}/booking/flight-order`, bookingData)
             // console.log("Booking response:", response.data);
             alert(`Booking successful! Order ID: ${response.data.orderId}`);
         } catch (error) {
