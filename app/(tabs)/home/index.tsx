@@ -191,7 +191,7 @@ export default function Home() {
       // },
       headerBackground: () => (
         <Image
-          source={require('@/assets/images/flight-bg1.avif')}
+          source={require('../../../assets/images/flight-bg.jpg')}
           style={{ width: '100%', height: '100%' }}
         />
       ),
@@ -201,20 +201,20 @@ export default function Home() {
   return (
     <View style={{flex: 1 }}>
       <ImageBackground
-        source={require('@/assets/images/flight-bg1.avif')}
+        source={require('../../../assets/images/flight-bg.jpg')}
         style={[ styles.background ]}
         resizeMode='cover'
         resizeMethod='scale'
       >
         <View style={styles.container}>
           <View style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 28, fontWeight: 'bold', color: theme.colors.disabled }}>
+            <Text style={{ fontSize: 28, fontWeight: 'bold', color: theme.colors.lightGray }}>
               Welcome
             </Text>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.primary }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.background }}>
               User
             </Text>
-            <Text style={{ fontSize: 16, color: theme.colors.onSurfaceVariant }}>
+            <Text style={{ fontSize: 16, color: theme.colors.disabled }}>
               Find the best flight deals
             </Text>
           </View>
