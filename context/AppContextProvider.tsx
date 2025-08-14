@@ -28,7 +28,9 @@ const [flightOffers, setFlightOffers] = useState([]);
 
 const [selectedFlightOffer, setSelectedFlightOffer] = useState<any>(null);
 
-const [apiUrl, setApiUrl] = useState("");
+const [apiUrl, setApiUrl] = useState("http://127.0.0.1:8080");
+
+const [flightBooking, setFlightBooking] = useState(null);
 
 const [travelers, setTravelers] = useState(
     Array(selectedFlightOffer && selectedFlightOffer.totalTravelers).fill({
@@ -94,7 +96,8 @@ return (
         flightOffers, setFlightOffers, 
         selectedFlightOffer, setSelectedFlightOffer,
         travelers, setTravelers,
-        apiUrl, setApiUrl
+        apiUrl, setApiUrl,
+        flightBooking, setFlightBooking
     }}>
         {children}
     </AppContext.Provider>

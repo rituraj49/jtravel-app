@@ -1,3 +1,4 @@
+import { theme } from "@/themes/theme";
 import { StyleSheet, View } from "react-native";
 import { Button, RadioButton, TextInput } from "react-native-paper";
 import DatePickerInput from "./DatePickerInput";
@@ -23,14 +24,14 @@ export default function TravelerForm({
         <View>
             <TextInput
                 label="First Name"
-                mode="outlined"
+                mode="flat"
                 value={traveler.firstName}
                 onChangeText={(text) => handleChange('firstName', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
             />
             <TextInput
                 label="Last Name"
-                mode="outlined"
+                mode="flat"
                 value={traveler.lastName}
                 onChangeText={(text) => handleChange('lastName', index)(text)}
                 style={styles.input}
@@ -42,21 +43,21 @@ export default function TravelerForm({
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                     {
-                        genderOptions.map((option: string) => (
-                            <>
+                        genderOptions.map((option: string, index: number) => (
+                            <View key={index}>
                                 <RadioButton value={option} />
                                 <Button>{option}</Button>
-                            </>
+                            </View>
                         ))
                     }
                 </View>
             </RadioButton.Group>
             <TextInput
                 label="Email"
-                mode="outlined"
+                mode="flat"
                 value={traveler.email}
                 onChangeText={(text) => handleChange('email', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
             />
             <DatePickerInput
                 // showDatePicker={showDatePicker}
@@ -74,15 +75,18 @@ export default function TravelerForm({
                         label="Code"
                         type="phoneNumber.countryCallingCode"
                         handleChange={(type) => (val) => handleChange(type, index)(val)}
+                        styles={{
+                            marginTop: 45
+                        }}
                     />
                 </View>
                 <View style={{ flex: 7 }}>
                     <TextInput
                         label="Phone Number"
-                        mode="outlined"
+                        mode="flat"
                         value={traveler.phoneNumber.number}
                         onChangeText={(text) => handleChange('phoneNumber.number', index)(text)}
-                        style={styles.input}
+                        style={{ backgroundColor: theme.colors.transparent}}
                     />
                 </View>
             </View>
@@ -92,29 +96,33 @@ export default function TravelerForm({
                 label="Type of Document"
                 type="document.documentType"
                 handleChange={(type) => (val) => handleChange(type, index)(val)}
+                styles={{
+                    marginTop: 45
+                }}
             />
+
             <TextInput
                 label="Birth Place"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.birthPlace}
                 onChangeText={(text) => handleChange('document.birthPlace', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={[styles.input, { marginTop: 10 }]}
                 placeholder="Ex - Delhi"
             />
             <TextInput
                 label="Issuance Location"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.issuanceLocation}
                 onChangeText={(text) => handleChange('document.issuanceLocation', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
                 placeholder="Ex - Delhi"
             />
             <TextInput
                 label="ID Number"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.number}
                 onChangeText={(text) => handleChange('document.number', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
             />
             <DatePickerInput
                 handleChange={(type: string) => (value: string) => handleChange(type, index)(value)}
@@ -130,26 +138,26 @@ export default function TravelerForm({
             />
             <TextInput
                 label="Issuance Country"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.issuanceCountry}
                 onChangeText={(text) => handleChange('document.issuanceCountry', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
                 placeholder="ISO Code - IN, US"
             />
             <TextInput
                 label="Validity Country"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.validityCountry}
                 onChangeText={(text) => handleChange('document.validityCountry', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
                 placeholder="ISO Code - IN, US"
             />
             <TextInput
                 label="Nationality"
-                mode="outlined"
+                mode="flat"
                 value={traveler.document.nationality}
                 onChangeText={(text) => handleChange('document.nationality', index)(text)}
-                style={{ marginBottom: 10 }}
+                style={styles.input}
                 placeholder="ISO Code - IN, US"
             />
         </View>
@@ -163,5 +171,6 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0,
         borderRightWidth: 0,
         borderRadius: 1,
+        backgroundColor: theme.colors.transparent
     }
 })

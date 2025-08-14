@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 
 import { useState } from 'react';
@@ -25,25 +25,9 @@ const DatePickerInput = ({
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     return (
-        <View>
+        <>
             {
                 isWeb ? (
-                    //  <RNTextInput
-                    //      style={{
-                    //         borderWidth: 1,
-                    //         borderRadius: 4,
-                    //         padding: 10,
-                    //         borderColor: '#ccc',
-                    //         marginVertical: 8
-                    //     }}
-                    //     value={dateValue}
-                    //     placeholder={placeholderText}
-                    //     onChange={(e) => {
-                    //         console.log(e.nativeEvent.text)
-                    //         // handleChange(dateType)(e.nativeEvent.text.split("T")[0]); // ISO string
-                    //     }}
-                    //     {...{ type: 'date' }} 
-                    // />
                      <input
                         type="date"
                         value={dateValue || ''}
@@ -54,7 +38,7 @@ const DatePickerInput = ({
                 ) : (
                     <>
                         <TextInput
-                            mode="outlined" 
+                            mode="flat" 
                             style={styles.input} 
                             onPressIn={() => setShowDatePicker(true)}
                             onFocus={() => setShowDatePicker(true)}
@@ -68,11 +52,11 @@ const DatePickerInput = ({
                             // value={searchParams["dateType"] ? new Date(searchParams["dateType"]) : new Date()}
                             value={dateValue ? new Date(dateValue) : new Date()}
                             mode="date"
-                            display="calendar"
+                            display="spinner"
                             onChange={(event, selectedDate) => {
                                 setShowDatePicker(false);
                                 if (selectedDate) {
-                                    console.log("Selected Date: ", selectedDate);
+                                    // console.log("Selected Date: ", selectedDate);
                                     setSelectedDate(selectedDate);
                                     handleChange(dateType)(selectedDate.toISOString().split('T')[0]);
                                 }
@@ -82,7 +66,7 @@ const DatePickerInput = ({
                     </>
                 )
             }
-        </View>
+        </>
     )
 }
 
@@ -93,6 +77,7 @@ const styles = StyleSheet.create({
     },
     input: {
       marginBottom: 16,
+      backgroundColor: "#ffffff02",
     }
 });
 

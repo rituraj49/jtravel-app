@@ -41,3 +41,4 @@ This command will move the starter code to the **app-example** directory and cre
 - eas init to initialize the project and sync to expo cloud account. Only for new project - `eas init --id <uuid generated from expo>`
 - run `npx expo expo-dev-client`
 - create eas json for creating builds - `eas build:configure`. Select all for both android and ios.
+- create build - `eas build --platform android --profile production` => profiles defined  in eas.json
