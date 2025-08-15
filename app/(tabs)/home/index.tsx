@@ -9,7 +9,13 @@ import { useNavigation, useRouter } from 'expo-router';
 import { useEffect, useState } from "react";
 import { Image, ImageBackground, Pressable, StyleSheet, View } from "react-native";
 import { Button, IconButton, Text, TextInput } from "react-native-paper";
+import axiosInstance from '../../../config/axiosConfig';
 
+axiosInstance.interceptors.request.use(config => {
+    return config;
+});
+
+export d
 export default function Home() {
   const {
     searchParams,
@@ -45,8 +51,8 @@ export default function Home() {
     try {
       if (keyword.length < 3) return;
       type === "from" ? setFromLoading(true) : setToLoading(true);
-      // const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
-      const response = await axios.get(`${apiUrl}/locations/search?keyword=${keyword}`);
+      const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
+     // const response = await axios.get(`${apiUrl}/locations/search?keyword=${keyword}`);
 
       // const suggestions = response.data?.flatMap((entry: any) => {
       //   return entry.groupData.length > 0 ? [entry, ...entry.groupData] : [entry];
@@ -152,8 +158,8 @@ export default function Home() {
       }
 
       const queryparams = convertToQueryParams(params);
-      // const response = await axiosInstance.get(`/flights/search?${queryparams}`);
-      const response = await axios.get(`${apiUrl}/flights/search?${queryparams}`);
+       const response = await axiosInstance.get(`/flights/search?${queryparams}`);
+     // const response = await axios.get(`${apiUrl}/flights/search?${queryparams}`);
       // console.log("Flight offers response: ", response);
       setFlightOffers(response.data.flightsAvailable);
       setTimeout(() => {
