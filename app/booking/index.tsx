@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Button, List } from "react-native-paper";
-import axiosInstance from '../../../config/axiosConfig';
+import axiosInstance from '../../config/axiosConfig';
 
 export default function Booking() {
     const {travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking} = useAppContext();
