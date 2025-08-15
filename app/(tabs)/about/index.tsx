@@ -24,6 +24,7 @@ export default function About() {
     >
       set url
     </Button>
+<Text>api set to :{apiUrl}</Text>
   </View>
   );
 }
