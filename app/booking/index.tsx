@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Button, List } from "react-native-paper";
+import axiosInstance from '../../../config/axiosConfig';
 
 export default function Booking() {
     const {travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking} = useAppContext();
@@ -94,8 +95,8 @@ export default function Booking() {
                 }))
             }
 
-            // const response = await axiosInstance.post("/booking/flight-order", bookingData)
-            const response = await axios.post(`${apiUrl}/booking/flight-order`, bookingData)
+            const response = await axiosInstance.post("/booking/flight-order", bookingData)
+          //  const response = await axios.post(`${apiUrl}/booking/flight-order`, bookingData)
             // console.log("Booking response:", response);
             // alert(`Booking successful! Order ID: ${response.data.orderId}`);
             setFlightBooking(response.data);
@@ -116,8 +117,8 @@ export default function Booking() {
             const body = {
                 flightOffer: selectedFlightOffer.pricingAdditionalInfo,
             }
-            // const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
-            const response = await axios.post(`${apiUrl}/pricing/flights/confirm`, body);
+             const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
+          //  const response = await axios.post(`${apiUrl}/pricing/flights/confirm`, body);
             console.log("Flight offer pricing:", response.data);
             setSelectedFlightOffer(response.data);
         } catch (error) {
