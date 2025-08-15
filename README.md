@@ -42,3 +42,9 @@ This command will move the starter code to the **app-example** directory and cre
 - run `npx expo expo-dev-client`
 - create eas json for creating builds - `eas build:configure`. Select all for both android and ios.
 - create build - `eas build --platform android --profile production` => profiles defined  in eas.json
+
+## Running project locally 
+- Run with "npm run start" and keep the backend running on port 8080 locally. 
+- In the app terminal, press s to switch to expo go
+- Open expo go app on Android phone and scan the qr after switching to expo go, otherwise it will expect the development apk.
+- Allow incoming requests on port 8080 through firewall. This way the backend server would be accessible on expo go app with the local network accessible ip of the system. 
