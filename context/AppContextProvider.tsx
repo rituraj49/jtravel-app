@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AppContext = createContext<any>(null);
@@ -30,6 +31,8 @@ const [selectedFlightOffer, setSelectedFlightOffer] = useState<any>(null);
 
 const [apiUrl, setApiUrl] = useState("http://127.0.0.1:8080");
 
+const [countriesData, setCountriesData] = useState([]);
+
 const [flightBooking, setFlightBooking] = useState(null);
 
 const [travelers, setTravelers] = useState(
@@ -56,6 +59,20 @@ const [travelers, setTravelers] = useState(
             holder: true
         }
     }));
+
+    const fetchCountriesData = async () => {
+        try {
+            const response = await axios.get("https://restcountries.com/v3.1/all?fields=name,cca2,flags,idd");
+            const data = response.data;
+            console.log(response)
+            setCountriesData(response.data);
+        } catch (error) {
+            console.error("Error fetching countries data:", error);
+        }
+    }
+    useEffect(() => {
+        fetchCountriesData();
+    }, []);
 
     useEffect(() => {
         if (selectedFlightOffer) {
@@ -97,7 +114,8 @@ return (
         selectedFlightOffer, setSelectedFlightOffer,
         travelers, setTravelers,
         apiUrl, setApiUrl,
-        flightBooking, setFlightBooking
+        flightBooking, setFlightBooking,
+        countriesData
     }}>
         {children}
     </AppContext.Provider>

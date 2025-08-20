@@ -38,19 +38,9 @@ export default function MenuDropdown({ items, selectedItem, label, type, handleC
                         />
                         </View>
                     </TouchableOpacity>
-                    // <Button
-                    //     mode="outlined"
-                    //     style={{ borderRadius: 4 }}
-                    //     onPress={openMenu}
-                    //     icon="chevron-down"
-                    //     contentStyle={{ flexDirection: 'row-reverse' }}
-                    //     labelStyle={selectedItem ? { fontWeight: 'bold' } : {}}
-                    // >
-                    //     {selectedItem || label}
-                    // </Button>
                 }>
-                {items.map((item: string) => (
-                    <View key={item} style={{  }}>
+                {items.map((item: string, index: number) => (
+                    <View key={index} style={{ backgroundColor: theme.colors.primaryContainer }}>
                         <Menu.Item
                             // key={item}
                             onPress={() => {

@@ -1,6 +1,5 @@
 import TravelerForm from "@/components/TravelerForm";
 import { useAppContext } from "@/context/AppContextProvider";
-import axios from "axios";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
@@ -170,39 +169,6 @@ export default function Booking() {
                     </View>
                         
                 ))
-                // <FlatList
-                //     data={travelers}
-                //     renderItem={(({item, index}) => (
-                //         <List.Accordion
-                //             title={`Traveler ${index + 1}`}
-                //             left={props => <List.Icon {...props} icon="account" />}
-                //             expanded={expandedIndex === index}
-                //             onPress={() => handleAccordionPress(index)}
-                //             // descriptionStyle={{ borderWidth: 1, borderColor: 'red', backgroundColor: theme.colors.transparent }}
-                //         >
-                //             <TravelerForm 
-                //                 traveler={item}
-                //                 handleChange={handleChange}
-                //                 index={index}
-                //                 genderOptions={genderOptions}
-                //                 documentTypeOptions={documentTypeOptions}
-                //                 countryCallingCodes={countryCallingCodes}
-                //             />
-                //         </List.Accordion>
-                //     ))}
-                //     ListFooterComponent={
-                //         <View style={{ padding: 10 }}>
-                //              <Button 
-                //                 mode="contained" 
-                //                 onPress={handleBooking}
-                //                 loading={loading}
-                //                 disabled={loading}
-                //             >
-                //                 {loading ? "Booking..." : "Book Flight"}
-                //             </Button>
-                //         </View>
-                //     }
-                // />
             }
             </ScrollView>
         </View>

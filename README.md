@@ -47,4 +47,5 @@ This command will move the starter code to the **app-example** directory and cre
 - Run with "npm run start" and keep the backend running on port 8080 locally. 
 - In the app terminal, press s to switch to expo go
 - Open expo go app on Android phone and scan the qr after switching to expo go, otherwise it will expect the development apk.
+- To change the backend api url ip, change the ip in `config/axiosConfig.ts` file
 - Allow incoming requests on port 8080 through firewall. This way the backend server would be accessible on expo go app with the local network accessible ip of the system. 

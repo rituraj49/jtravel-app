@@ -1,14 +1,14 @@
 import { AppContextProvider } from "@/context/AppContextProvider";
 import { theme } from "@/themes/theme";
 import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as PaperProvider } from "react-native-paper";
 
 export default function RootLayout() {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <AppContextProvider>
         <PaperProvider theme={theme}>
-          {/* <Slot /> */}
-
             <Stack
               screenOptions={{
                 headerStyle: {
@@ -29,7 +29,6 @@ export default function RootLayout() {
               <Stack.Screen name="booking" options={{
                 headerLeft: () => <></>,
                 headerShown: false
-                
               }}/>
               {/* <Stack.Screen name="index" options={{
                 headerTitle: "FlightMate",
@@ -53,5 +52,6 @@ export default function RootLayout() {
             </Stack>
         </PaperProvider>
       </AppContextProvider>
+    </GestureHandlerRootView>
   );
 }

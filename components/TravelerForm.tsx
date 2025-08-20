@@ -1,3 +1,4 @@
+import { useAppContext } from "@/context/AppContextProvider";
 import { theme } from "@/themes/theme";
 import { StyleSheet, View } from "react-native";
 import { Button, RadioButton, TextInput } from "react-native-paper";
@@ -20,6 +21,7 @@ export default function TravelerForm({
     documentTypeOptions, 
     countryCallingCodes
 }: TravelerFormType) {
+    const { countriesData } = useAppContext();
     return (
         <View>
             <TextInput
@@ -44,9 +46,9 @@ export default function TravelerForm({
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                     {
                         genderOptions.map((option: string, index: number) => (
-                            <View key={index}>
+                            <View key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton value={option} />
-                                <Button>{option}</Button>
+                                <Button style={{ marginStart: -15 }}>{option}</Button>
                             </View>
                         ))
                     }
@@ -70,7 +72,7 @@ export default function TravelerForm({
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, gap: 10, alignItems: 'center' }}>
                 <View style={{ flex: 2 }}>
                     <MenuDropdown
-                        items={countryCallingCodes}
+                        items={countriesData.map((c: any) => `${c.idd.root}${c.idd.suffixes.map((s: string) => s).join('')}`)}
                         selectedItem={traveler.phoneNumber.countryCallingCode}
                         label="Code"
                         type="phoneNumber.countryCallingCode"

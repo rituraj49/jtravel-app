@@ -51,12 +51,18 @@ function TripDetails({ trip, tripIndex }: {trip: any, tripIndex: string}) {
                 <Text variant="bodyMedium" style={{ color: "#888" }}>
                     Total Duration: {trip.totalFlightDuration}
                 </Text>
-                <Text variant="bodyMedium" style={{ color: "#888" }}>
-                    Stops: {trip.stops} {trip.stops > 1 ? "stops" : "stop"}
-                </Text>
-                <Text variant="bodyMedium" style={{ color: "#888" }}>
-                    Layover: {trip.totalLayoverDuration}
-                </Text>
+                {
+                    trip.stops > 0 && (
+                        <>
+                            <Text variant="bodyMedium" style={{ color: "#888" }}>
+                                Stops: {trip.stops} {trip.stops > 1 ? "stops" : "stop"}
+                            </Text>
+                            <Text variant="bodyMedium" style={{ color: "#888" }}>
+                                Layover: {trip.totalLayoverDuration}
+                            </Text>
+                        </>
+                    )
+                }
                 </View>
             </View>
             <Divider style={{ marginVertical:10 }} />

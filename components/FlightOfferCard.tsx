@@ -1,9 +1,8 @@
 import { theme } from '@/themes/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
-import { Image, View } from 'react-native';
-import { Badge, Card, Text } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import { Card, Text } from 'react-native-paper';
 
 export default function FlightCard({ flightData, handleSubmit, flightIndex }: 
     { flightData: any, handleSubmit: () => void, flightIndex: string }) {
@@ -18,41 +17,70 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
     };
 
     const handleBookFlight = () => {
-        // console.log("Booking flight with data: ", flightData);
-        // if(flightData) {
-        //     setSelectedFlightOffer(flightData);
-        //     router.push('/booking' as Route);
-        // }
         handleSubmit();
     };
 
     return (
-        <>
+        <View key={flightIndex}>
             <Card
                 key={flightIndex} 
-                style={{ margin: 10, borderWidth: 5, borderColor: theme.colors.primary }}
+                mode='contained'
+                style={{ 
+                    marginHorizontal: 5, 
+                    marginBottom: 10, 
+                    padding: 5,
+                    borderWidth: 0, 
+                    borderRadius: 12,
+                    backgroundColor: theme.colors.primaryContainer,
+                    // overflow: 'hidden',
+                    // ...(Platform.OS === "android" && {
+                        elevation: 0,
+                        shadowOpacity: 0,
+                        borderStartWidth: 5,
+                        borderEndWidth: 5,
+                        borderTopWidth: 1,
+                        borderBottomWidth: 1,
+                        // borderTopWidth: 5,
+                        // borderBottomWidth: 5,
+                        // borderWidth: 1,
+                        borderColor: theme.colors.lightGray,
+                    // }),
+                }}
+                // theme={{
+                //     colors: {
+                //         elevation: { level2: "transparent" }
+                //     }
+                // }}
             >
-                <LinearGradient
-                    colors={[theme.colors.primary, theme.colors.primaryGlass]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={{
-                        // flex: 1,
-                        // margin: 10,
-                        // borderWidth: 5,
-                        borderColor: theme.colors.primaryGlass,
-                        borderRadius: 12,
-                        overflow: 'hidden',
-                    }}
-                >
                 {
                     trips.map((trip: any, index: number) => {
                         const firstLeg = trip.legs[0];
                         const lastLeg = trip.legs[trip.legs.length - 1];
                         return (
-                            <>
+                            <View key={index}>
                             <Card.Title
-                                style={{ paddingVertical: 0, marginBottom: -20 }}
+                                titleStyle={{
+                                    marginBottom: 0,
+                                    paddingBottom: 0,
+                                    height: 30,
+                                }}
+                                subtitleStyle={{
+                                    marginTop: -10,
+                                    marginBottom: 15,
+                                    paddingBottom: 0,
+                                    marginLeft: 35
+                                }}
+                                style={{
+                                    // borderWidth: 1,
+                                    paddingHorizontal: 4,
+                                    // paddingVertical: 0,
+                                    backgroundColor: "transparent",
+                                    paddingTop: 2,
+                                    margin: 3,
+                                    marginBottom: -20,
+                                    minHeight: 40,
+                                    overflow: 'visible'
+                                }}
                                 // title={``} 
                                 right={() => (
                                     <View style={{ alignItems: "center", marginRight: 10 }}>
@@ -75,30 +103,91 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                                     </View>
                                 )}
                                 title={
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <Image
-                                            source={{ uri: `https://content.airhex.com/content/logos/airlines_${firstLeg.operatingCarrierCode}_100_100_s.png` }}
-                                            style={{ width: 24, height: 24, marginRight: 8 }}
-                                        />
-                                        {/* <Text>Airline: {firstLeg.carrierName}</Text> */}
-                                        <Text 
-                                            variant='titleMedium' 
-                                            style={{ fontWeight: "bold"}}
-                                        >Air India</Text>
-                                        {
-                                            firstLeg.carrierCode !== firstLeg.operatingCarrierCode && (
-                                                <>
-                                                    <Text variant='bodySmall'> &nbsp; - (Operated by {firstLeg.operatingCarrierName})</Text>
-                                                    <Image
-                                                        source={{ uri: `https://content.airhex.com/content/logos/airlines_${firstLeg.operatingCarrierCode}_100_100_s.png` }}
-                                                        style={{ width: 24, height: 24, marginRight: 8 }}
-                                                    />
-                                                </>
+                                    <View style={{ 
+                                        flexDirection: "column", 
+                                        alignItems: "flex-start", 
+                                        justifyContent: 'center',
+                                        marginTop: 0,
+                                        // borderWidth: 1,
+                                        paddingBottom: 0, 
+                                        padding: 0,
+                                    }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                            <Image
+                                                source={{ uri: `https://content.airhex.com/content/logos/airlines_${firstLeg.operatingCarrierCode}_100_100_s.png` }}
+                                                style={{ width: 24, height: 24, marginRight: 8 }}
+                                            />
+                                            {/* <Text>Airline: {firstLeg.carrierName}</Text> */}
+                                            <Text 
+                                                variant='labelSmall' 
+                                                style={{ fontWeight: "bold"}}
+                                            >{firstLeg.carrierName}</Text>
+                                            <Text 
+                                                variant='labelMedium' 
+                                                style={{ fontWeight: "normal", color: theme.colors.darkGray}}
+                                            >({firstLeg.aircraft})</Text>
+                                        </View>
+                                        {/* {
+                                            trip.stops > 0 &&
+                                            <View style={{
+                                                alignItems: 'flex-start',
+                                                justifyContent: 'flex-start',
+                                                marginLeft: 35
+                                                // display: 'flex', flexDirection: 'row', alignItems: 'center' 
+                                                }}>
+                                                    <Text variant='labelSmall'>Layover {trip.totalLayoverDuration}</Text>
+                                            </View>
+                                        } */}
+                                            
+                                        {/* {
+                                            firstLeg.carrierCode.toLowerCase() !== firstLeg.operatingCarrierCode.toLowerCase() && (
+                                                <View style={{ marginLeft: 10, flexShrink: 1 }}>
+                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                                        <Image
+                                                            source={{ uri: `https://content.airhex.com/content/logos/airlines_${firstLeg.operatingCarrierCode}_100_100_s.png` }}
+                                                            style={{ width: 24, height: 24, marginRight: 8 }}
+                                                        />
+                                                        <Text
+                                                            variant='bodySmall'
+                                                            style={{ flexShrink: 1 }}
+                                                            numberOfLines={2}
+                                                        >
+                                                            Operated by
+                                                        </Text>
+                                                        <Text
+                                                            variant='bodySmall'
+                                                            style={{ flexShrink: 1 }}
+                                                            numberOfLines={2}
+                                                        >
+                                                            {firstLeg.operatingCarrierName}
+                                                        </Text>
+                                                    </View>
+                                                </View>
                                             )
-                                        }
+                                        } */}
                                     </View>
-                                } 
-                                // subtitle={`Base: ${currencyCode} ${basePrice} | Seats Left: ${seatsAvailable}`}
+                                }
+                                subtitle={
+                                    trip.stops > 0 ?
+                                    <View style={{
+                                        alignItems: 'flex-start',
+                                        justifyContent: 'flex-start',
+                                        // marginLeft: 35,
+                                        // marginBottom: 0,
+                                        // display: 'flex', flexDirection: 'row', alignItems: 'center' 
+                                        }}>
+                                            <Text variant='labelSmall'>Layover {trip.totalLayoverDuration}</Text>
+                                    </View> : 
+                                    <View style={{
+                                        alignItems: 'flex-start',
+                                        justifyContent: 'flex-start',
+                                        // marginLeft: 35,
+                                        // marginBottom: 10,
+                                        // display: 'flex', flexDirection: 'row', alignItems: 'center' 
+                                        }}>
+                                        <Text variant='labelSmall'>Non-Stop</Text>
+                                    </View>
+                                }
                             />
                             <Card.Content style={{ paddingVertical: 5, }}>
                                 {/* {trips.map((trip: any, index: number) => {
@@ -106,64 +195,100 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                                 const lastLeg = trip.legs[trip.legs.length - 1];
 
                                 return ( */}
-                                    <View key={`leg-${index}`} style={{ marginBottom: 15, alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', 
-                                        // borderWidth:1, borderColor: 'red'
+                                    <View key={`leg-${index}`} style={{ 
+                                        marginBottom: 15, 
+                                        alignItems: 'center', 
+                                        display: 'flex', 
+                                        flexDirection: 'row', 
+                                        justifyContent: 'space-between',
+                                        alignContent: 'center', 
+                                        // borderWidth: 1, borderColor: 'red'
                                     }}>
                                         {/* <Button onPress={()=>console.log(firstLeg)}>leg</Button>
                                         <View>
                                             <Text>{firstLeg.carrierCode}</Text>
                                         </View> */}
-                                        {/* {
-                                            firstLeg.operatingCarrierCode == firstLeg.carrierCode && (
-                                                <View>
-
-                                                </View>
-                                            )
-                                        } */}
-                                        {/* <Text>lay{trip.totalLayoverDuration}</Text> */}
                                         <View style={{ alignItems: 'center' }}>
-                                            <Text variant="titleMedium">{firstLeg.departureAirport}</Text>
-                                            <Text variant="bodySmall">{formatDateTime(firstLeg.departureDateTime)}</Text>
+                                            <Text style={styles.locations} variant="titleMedium">{firstLeg.departureAirport}</Text>
+                                            <Text style={styles.dateTime} variant="bodySmall">{formatDateTime(firstLeg.departureDateTime)}</Text>
                                         </View>
-
                                         {
-                                            trip.stops > 0 ?
-                                                (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                                        {trip.legs.slice(0, -1).map((leg: any, legIdx: number) => (
-                                                        <>
-                                                            <View 
-                                                                key={`leg-stop-${legIdx}`} 
-                                                                style={{ alignItems: 'center', marginVertical: 5}}
-                                                            >
-                                                            <Badge style={{ width: 120, marginBottom: 5, fontSize: 12 }}>
-                                                                {/* {`Layover: ${leg.layoverAfter}`} */}
-                                                                {`Layover: ${trip.totalLayoverDuration}`}
-                                                            </Badge>
-                                                            <Text variant="bodySmall">{`at ${leg.arrivalAirport}`}</Text>
-                                                            </View>
-                                                            <View>
-                                                                <Text variant="labelLarge">{`Stops: ${trip.stops}`}</Text>
-                                                            </View>
-                                                        </>
-                                                        ))}
-                                                    </View>) : (<View>
-                                                        {/* <Text variant='bodyMedium'>Non-Stop</Text> */}
-                                                        <Badge disabled style={{ width: 70, backgroundColor: theme.colors.success }}>
-                                                            Non-Stop
-                                                        </Badge>
-                                                    </View>)
+                                            <View style={{
+                                                display: 'flex', 
+                                                flexDirection: 'column', 
+                                                alignItems: 'center', justifyContent: 'center'
+                                            }}>
+                                                <View style={{ marginBottom: -8}}>
+                                                    <Text variant="labelSmall">{trip.totalFlightDuration}</Text>
+                                                </View>
+                                                <View style={{
+                                                    height: 30,
+                                                    // borderWidth: 1,
+                                                    width: 80,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    marginVertical: 0,
+                                                    // borderWidth: 1,
+                                                }}>
+                                                    {/* bar */}
+                                                    <View
+                                                        style={{
+                                                        height: 3,
+                                                        backgroundColor: theme.colors.lightGray,
+                                                        width: "100%",
+                                                        position: "absolute",
+                                                        top: 12,
+                                                        left: 0,
+                                                        marginTop: 1,
+                                                        zIndex: 1,
+                                                        // borderWidth: 1
+                                                    }}
+                                                />
+                                                {/* dots */}
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "row",
+                                                            justifyContent: "space-evenly",
+                                                            alignItems: 'center',
+                                                            width: "90%",
+                                                            zIndex: 2,
+                                                            // borderWidth: 1
+                                                        }}
+                                                    > 
+                                                        {
+                                                            trip.legs.slice(0, -1).map((leg: any, index: number) => {
+                                                                return (
+                                                                    <>
+                                                                        <View
+                                                                            style={{
+                                                                                width: 10,
+                                                                                height: 10,
+                                                                                borderRadius: 5,
+                                                                                backgroundColor: theme.colors.primary,
+                                                                                borderWidth: 2,
+                                                                                borderColor: theme.colors.primary,
+                                                                            }}
+                                                                        />
+                                                                    </>
+                                                                )
+                                                            })
+                                                        }
+                                                    </View>
+                                                </View>
+                                                <View style={{ marginTop: -5}}>
+                                                    <Text variant='bodySmall'>{`${trip.stops} Stop${trip.stops > 1 ? 's' : ''}`}</Text>
+                                                </View>
+                                            </View>
                                         }
-
-                                        <View style={{ alignItems: 'center', marginTop: 5 }}>
-                                            <Text variant="titleMedium">{lastLeg.arrivalAirport}</Text>
-                                            <Text variant="bodySmall">{formatDateTime(lastLeg.arrivalDateTime)}</Text>
+                                        <View style={{ alignItems: 'center' }}>
+                                            <Text style={styles.locations} variant="titleMedium">{lastLeg.arrivalAirport}</Text>
+                                            <Text style={ styles.dateTime } variant="bodySmall">{formatDateTime(lastLeg.arrivalDateTime)}</Text>
                                         </View>
                                     </View>
                                 {/* );
                                 })} */}
                             </Card.Content>
-                            </>
-                            
+                            </View>
                         )
                     })
                 }
@@ -175,7 +300,7 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                             paddingVertical: 10,
                             paddingHorizontal: 15,
                             borderTopWidth: 1,
-                            borderTopColor: theme.colors.surfaceVariant,
+                            borderTopColor: theme.colors.lightGray,
                         }}
                     >
                         <View>
@@ -201,8 +326,20 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                             onPress={handleBookFlight}
                         />
                     </View>
-                </LinearGradient>
+                {/* </LinearGradient> */}
             </Card>
-        </>
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    locations: { 
+        fontSize: 16,
+        fontWeight: 'bold', 
+        fontStyle:"italic"
+    },
+    dateTime: {
+        fontSize: 12, 
+        fontWeight: 'bold'
+    }
+});
