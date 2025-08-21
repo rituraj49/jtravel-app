@@ -23,7 +23,7 @@ export default function Offers() {
       // navigation.navigate("../booking/index");
       router.push("/booking/flightDetails");
       bottomSheetRef.current?.expand();
-      console.log("bottomSheetRef: ", bottomSheetRef.current?.expand);
+      // console.log("bottomSheetRef: ", bottomSheetRef.current?.expand);
     }
   };
   // useEffect(() => {

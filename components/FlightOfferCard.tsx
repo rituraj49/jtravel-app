@@ -2,7 +2,7 @@ import { theme } from '@/themes/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 
 export default function FlightCard({ flightData, handleSubmit, flightIndex }: 
     { flightData: any, handleSubmit: () => void, flightIndex: string }) {
@@ -17,6 +17,7 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
     };
 
     const handleBookFlight = () => {
+        console.log("details clicked")
         handleSubmit();
     };
 
@@ -36,10 +37,10 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                     // ...(Platform.OS === "android" && {
                         elevation: 0,
                         shadowOpacity: 0,
-                        borderStartWidth: 5,
-                        borderEndWidth: 5,
-                        borderTopWidth: 1,
-                        borderBottomWidth: 1,
+                        borderStartWidth: 0,
+                        borderEndWidth: 0,
+                        borderTopWidth: 0,
+                        borderBottomWidth: 0,
                         // borderTopWidth: 5,
                         // borderBottomWidth: 5,
                         // borderWidth: 1,
@@ -127,44 +128,6 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                                                 style={{ fontWeight: "normal", color: theme.colors.darkGray}}
                                             >({firstLeg.aircraft})</Text>
                                         </View>
-                                        {/* {
-                                            trip.stops > 0 &&
-                                            <View style={{
-                                                alignItems: 'flex-start',
-                                                justifyContent: 'flex-start',
-                                                marginLeft: 35
-                                                // display: 'flex', flexDirection: 'row', alignItems: 'center' 
-                                                }}>
-                                                    <Text variant='labelSmall'>Layover {trip.totalLayoverDuration}</Text>
-                                            </View>
-                                        } */}
-                                            
-                                        {/* {
-                                            firstLeg.carrierCode.toLowerCase() !== firstLeg.operatingCarrierCode.toLowerCase() && (
-                                                <View style={{ marginLeft: 10, flexShrink: 1 }}>
-                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                                                        <Image
-                                                            source={{ uri: `https://content.airhex.com/content/logos/airlines_${firstLeg.operatingCarrierCode}_100_100_s.png` }}
-                                                            style={{ width: 24, height: 24, marginRight: 8 }}
-                                                        />
-                                                        <Text
-                                                            variant='bodySmall'
-                                                            style={{ flexShrink: 1 }}
-                                                            numberOfLines={2}
-                                                        >
-                                                            Operated by
-                                                        </Text>
-                                                        <Text
-                                                            variant='bodySmall'
-                                                            style={{ flexShrink: 1 }}
-                                                            numberOfLines={2}
-                                                        >
-                                                            {firstLeg.operatingCarrierName}
-                                                        </Text>
-                                                    </View>
-                                                </View>
-                                            )
-                                        } */}
                                     </View>
                                 }
                                 subtitle={
@@ -258,7 +221,7 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                                                         {
                                                             trip.legs.slice(0, -1).map((leg: any, index: number) => {
                                                                 return (
-                                                                    <>
+                                                                    <View key={index}>
                                                                         <View
                                                                             style={{
                                                                                 width: 10,
@@ -269,15 +232,18 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                                                                                 borderColor: theme.colors.primary,
                                                                             }}
                                                                         />
-                                                                    </>
+                                                                    </View>
                                                                 )
                                                             })
                                                         }
                                                     </View>
                                                 </View>
-                                                <View style={{ marginTop: -5}}>
-                                                    <Text variant='bodySmall'>{`${trip.stops} Stop${trip.stops > 1 ? 's' : ''}`}</Text>
-                                                </View>
+                                                {
+                                                    trip.stops > 0 &&
+                                                    <View style={{ marginTop: -5}}>
+                                                        <Text variant='bodySmall'>{`${trip.stops} Stop${trip.stops > 1 ? 's' : ''}`}</Text>
+                                                    </View>
+                                                }
                                             </View>
                                         }
                                         <View style={{ alignItems: 'center' }}>
@@ -312,19 +278,19 @@ export default function FlightCard({ flightData, handleSubmit, flightIndex }:
                             </Text>
                         </View>
 
-                        {/* Arrow Button */}
                         {/* <IconButton
                             icon="arrow-right"
                             size={24}
                             onPress={handleBookFlight}
                             mode="contained"
                         /> */}
-                        <MaterialCommunityIcons 
+                        {/* <MaterialCommunityIcons 
                             name="menu-right"
                             size={24}
                             color={theme.colors.primary}
                             onPress={handleBookFlight}
-                        />
+                        /> */}
+                        <Button onPress={handleBookFlight}>Details</Button>
                     </View>
                 {/* </LinearGradient> */}
             </Card>
